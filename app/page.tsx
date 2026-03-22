@@ -12,6 +12,10 @@ type AuthUser = {
   email: string;
 };
 
+const PROJECT_NAME = "SQL Playground";
+const PROJECT_TAGLINE =
+  "Learn SQL like a real database engineer: design schema, insert data, and solve analytical queries step by step.";
+
 export default function Home() {
   const router = useRouter();
   const [levels, setLevels] = useState<Record<number, Level[]>>({});
@@ -159,13 +163,8 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-900 to-slate-800 text-white">
         <div className="mx-auto max-w-6xl px-4 py-8">
-          <h1 className="text-4xl font-black tracking-tight">
-            SQL Escape Dungeon
-          </h1>
-          <p className="mt-2 text-base text-blue-100">
-            Create tables using SQL, match the fixed ER diagram, insert data,
-            then unlock query tasks.
-          </p>
+          <h1 className="text-4xl font-black tracking-tight">{PROJECT_NAME}</h1>
+          <p className="mt-2 text-base text-blue-100">{PROJECT_TAGLINE}</p>
 
           <div className="mt-4 flex flex-wrap gap-2">
             <span className="rounded-full border border-blue-200/40 bg-blue-500/20 px-3 py-1 text-xs font-semibold">
@@ -288,8 +287,9 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold text-white mb-1">
-                ⚔️ SQL ESCAPE DUNGEON
+                🌐 {PROJECT_NAME}
               </h1>
+              <p className="text-sm text-cyan-100 mb-1">{PROJECT_TAGLINE}</p>
               <p className="text-base text-gray-300">Welcome, {user.name}</p>
               <p className="text-sm text-gray-400">{user.email}</p>
             </div>

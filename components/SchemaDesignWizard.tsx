@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { TableSchema } from "@/types";
 import Button from "./Button";
 import FixedERDiagram from "./FixedERDiagram";
@@ -73,6 +73,79 @@ export default function SchemaDesignWizard({
   const [expandedTables, setExpandedTables] = useState<Set<string>>(
     new Set(level.expectedSchema.map((t) => t.name)),
   );
+
+  const createTablePlaceholder = useMemo(() => {
+    if (!level.expectedSchema.length) {
+      return "CREATE TABLE example_table (\n  id INT PRIMARY KEY\n);";
+    }
+
+    return level.expectedSchema
+      .map((table) => {
+        const columnLines = table.columns.map((column) => {
+          const parts = [column.name, column.type];
+
+          if (column.isPrimary) {
+            parts.push("PRIMARY KEY");
+          }
+
+          if (column.isNullable === false && !column.isPrimary) {
+            parts.push("NOT NULL");
+          }
+
+          if (column.isForeign && column.references) {
+            parts.push(
+              `REFERENCES ${column.references.table}(${column.references.column})`,
+            );
+          }
+
+          return `  ${parts.join(" ")}`;
+        });
+
+        return `CREATE TABLE ${table.name} (\n${columnLines.join(",\n")}\n);`;
+      })
+      .join("\n\n");
+  }, [level.expectedSchema]);
+
+  const insertPlaceholder = useMemo(() => {
+    const required = level.requiredInserts || {};
+    const tableNames = Object.keys(required).length
+      ? Object.keys(required)
+      : level.expectedSchema.slice(0, 2).map((table) => table.name);
+
+    if (!tableNames.length) {
+      return "INSERT INTO example_table (id) VALUES (1);";
+    }
+
+    return tableNames
+      .map((tableName) => {
+        const table = level.expectedSchema.find(
+          (item) => item.name === tableName,
+        );
+        if (!table || table.columns.length === 0) {
+          return `INSERT INTO ${tableName} VALUES (...);`;
+        }
+
+        const cols = table.columns;
+        const columnList = cols.map((col) => col.name).join(", ");
+        const sampleValues = cols
+          .map((col) => {
+            if (col.type === "INT" || col.type === "FLOAT") {
+              return "1";
+            }
+            if (col.type === "BOOLEAN") {
+              return "TRUE";
+            }
+            if (col.type === "DATE") {
+              return "'2026-01-01'";
+            }
+            return `'sample_${col.name}'`;
+          })
+          .join(", ");
+
+        return `INSERT INTO ${tableName} (${columnList}) VALUES (${sampleValues});`;
+      })
+      .join("\n");
+  }, [level.expectedSchema, level.requiredInserts]);
 
   const toggleTableExpand = (tableName: string) => {
     const newExpanded = new Set(expandedTables);
@@ -202,10 +275,15 @@ export default function SchemaDesignWizard({
 
             {/* Center & Right: Database Structure */}
             <div className="lg:col-span-2 lg:sticky lg:top-4 lg:self-start">
-              <div className="bg-white rounded-lg shadow p-4 space-y-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-hidden">
+              <div className="bg-white rounded-lg shadow p-4 space-y-4">
                 <h3 className="text-xl font-bold text-gray-900">
                   🗄️ Target Database Structure
                 </h3>
+
+                <p className="text-sm text-slate-600">
+                  Parent tables are placed on the left and dependent tables on
+                  the right. Relationship arrows represent foreign-key links.
+                </p>
 
                 <FixedERDiagram tables={level.expectedSchema} />
 
@@ -326,19 +404,7 @@ export default function SchemaDesignWizard({
                     value={createTableSQL}
                     onChange={(e) => setCreateTableSQL(e.target.value)}
                     className="w-full h-64 p-3 border-2 border-gray-300 rounded-lg font-mono text-sm text-gray-900 bg-white focus:border-blue-600 focus:outline-none focus:ring-0"
-                    placeholder={`CREATE TABLE department (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    building VARCHAR(255)
-);
-
-CREATE TABLE student (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255),
-    department_id INT NOT NULL,
-    FOREIGN KEY (department_id) REFERENCES department(id)
-);`}
+                    placeholder={createTablePlaceholder}
                   />
                 </div>
 
@@ -469,8 +535,7 @@ CREATE TABLE student (
                     value={insertSQL}
                     onChange={(e) => setInsertSQL(e.target.value)}
                     className="w-full h-44 p-3 border-2 border-gray-300 rounded-lg font-mono text-sm text-gray-900 bg-white focus:border-blue-600 focus:outline-none focus:ring-0"
-                    placeholder={`INSERT INTO department (id, name, building) VALUES (1, 'Computer Science', 'A');
-INSERT INTO student (id, name, email, department_id) VALUES (1, 'Anu', 'anu@college.edu', 1);`}
+                    placeholder={insertPlaceholder}
                   />
 
                   <Button
