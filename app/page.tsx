@@ -150,10 +150,12 @@ export default function Home() {
 
   if (loading || authLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-900">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-slate-900 via-blue-900 to-slate-800 px-4">
+        <div className="pointer-events-none absolute -top-28 -left-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-blue-400/20 blur-3xl" />
         <div className="text-center">
-          <div className="text-4xl mb-4">⚔️</div>
-          <p className="text-gray-200">Loading SQL Escape Dungeon...</p>
+          <div className="text-6xl md:text-7xl mb-4 animate-bounce">⚔️</div>
+          <p className="text-base md:text-lg text-gray-200 font-medium">Loading SQL Playground...</p>
         </div>
       </div>
     );
@@ -161,49 +163,51 @@ export default function Home() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-900 to-slate-800 text-white">
-        <div className="mx-auto max-w-6xl px-4 py-8">
-          <h1 className="text-4xl font-black tracking-tight">{PROJECT_NAME}</h1>
-          <p className="mt-2 text-base text-blue-100">{PROJECT_TAGLINE}</p>
+      <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-900 via-blue-900 to-slate-800 text-white">
+        <div className="pointer-events-none absolute -top-36 left-0 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-1/3 h-72 w-72 rounded-full bg-indigo-400/20 blur-3xl" />
+        <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
+          <h1 className="text-3xl font-black tracking-tight md:text-5xl">{PROJECT_NAME}</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-blue-100 md:text-base">{PROJECT_TAGLINE}</p>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            <span className="rounded-full border border-blue-200/40 bg-blue-500/20 px-3 py-1 text-xs font-semibold">
-              College
+          <div className="mt-6 flex flex-wrap gap-3 items-center">
+            <span className="text-sm md:text-base font-semibold text-blue-200">Available Schemas:</span>
+            <span className="rounded-full border border-blue-300/60 bg-blue-500/30 px-3 py-1.5 text-xs md:text-sm font-semibold hover:bg-blue-500/40 transition">
+              🎓 College
             </span>
-            <span className="rounded-full border border-blue-200/40 bg-blue-500/20 px-3 py-1 text-xs font-semibold">
-              Ecommerce
+            <span className="rounded-full border border-blue-300/60 bg-blue-500/30 px-3 py-1.5 text-xs md:text-sm font-semibold hover:bg-blue-500/40 transition">
+              🛒 Ecommerce
             </span>
-            <span className="rounded-full border border-blue-200/40 bg-blue-500/20 px-3 py-1 text-xs font-semibold">
-              Restaurant
+            <span className="rounded-full border border-blue-300/60 bg-blue-500/30 px-3 py-1.5 text-xs md:text-sm font-semibold hover:bg-blue-500/40 transition">
+              🍽️ Restaurant
             </span>
           </div>
 
-          <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_1fr]">
-            <div className="rounded-xl border border-blue-200/20 bg-black/25 p-5">
-              <h2 className="text-xl font-bold">Clear 3-Step Flow</h2>
-              <ol className="mt-3 space-y-2 text-sm text-blue-100">
-                <li>1. Create schema with CREATE TABLE</li>
-                <li>2. Insert required sample rows</li>
-                <li>3. Solve analytical query task</li>
+          <div className="mt-8 grid gap-6 md:mt-10 lg:grid-cols-[1.1fr_1fr]">
+            <div className="rounded-xl border border-blue-200/20 bg-black/30 p-6 backdrop-blur md:p-8">
+              <h2 className="text-xl font-bold text-white md:text-2xl">Clear 3-Step Flow</h2>
+              <ol className="mt-4 space-y-3 text-sm font-medium text-blue-100 md:text-base">
+                <li className="flex items-start gap-3"><span className="text-blue-300 font-bold min-w-6">1.</span><span>Create schema with CREATE TABLE statements</span></li>
+                <li className="flex items-start gap-3"><span className="text-blue-300 font-bold min-w-6">2.</span><span>Insert required sample data rows</span></li>
+                <li className="flex items-start gap-3"><span className="text-blue-300 font-bold min-w-6">3.</span><span>Solve the analytical query task</span></li>
               </ol>
-              <p className="mt-3 text-xs text-blue-100/90">
-                Each task requires schema creation with CREATE TABLE, enough
-                INSERT data, then query validation.
+              <p className="mt-4 text-xs leading-relaxed text-blue-100/80 md:text-sm">
+                Each challenge requires proper schema design, sufficient test data, and correct query validation to complete.
               </p>
             </div>
 
             <form
               onSubmit={handleAuthSubmit}
-              className="rounded-xl border border-blue-200/20 bg-white p-5 text-gray-900 shadow-2xl"
+              className="rounded-xl border border-blue-200/30 bg-white/95 p-6 text-gray-900 shadow-2xl backdrop-blur md:p-8"
             >
-              <div className="flex rounded-lg border border-gray-300 p-1 text-sm font-semibold">
+              <div className="flex gap-1 rounded-lg border-2 border-gray-200 p-1.5 text-sm font-semibold">
                 <button
                   type="button"
                   onClick={() => setMode("login")}
-                  className={`flex-1 rounded-md px-3 py-2 ${
+                  className={`flex-1 rounded-md px-3 py-2.5 transition-colors ${
                     mode === "login"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-600"
+                      ? "bg-blue-600 text-white shadow"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   Login
@@ -211,10 +215,10 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => setMode("signup")}
-                  className={`flex-1 rounded-md px-3 py-2 ${
+                  className={`flex-1 rounded-md px-3 py-2.5 transition-colors ${
                     mode === "signup"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-600"
+                      ? "bg-blue-600 text-white shadow"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
                   Sign Up
@@ -223,40 +227,43 @@ export default function Home() {
 
               {mode === "signup" && (
                 <div className="mt-4">
-                  <label className="mb-1 block text-sm font-semibold">
-                    Name
+                  <label className="mb-1 block text-sm font-semibold text-gray-700">
+                    Full Name
                   </label>
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                    placeholder="John Doe"
+                    className="w-full rounded-lg border-2 border-gray-200 px-3 py-2.5 outline-hidden transition focus:border-blue-500"
                     required
                   />
                 </div>
               )}
 
               <div className="mt-4">
-                <label className="mb-1 block text-sm font-semibold">
-                  Email
+                <label className="mb-1 block text-sm font-semibold text-gray-700">
+                  Email Address
                 </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                  placeholder="you@example.com"
+                  className="w-full rounded-lg border-2 border-gray-200 px-3 py-2.5 outline-hidden transition focus:border-blue-500"
                   required
                 />
               </div>
 
               <div className="mt-4">
-                <label className="mb-1 block text-sm font-semibold">
+                <label className="mb-1 block text-sm font-semibold text-gray-700">
                   Password
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                  placeholder="********"
+                  className="w-full rounded-lg border-2 border-gray-200 px-3 py-2.5 outline-hidden transition focus:border-blue-500"
                   required
                 />
               </div>
@@ -269,9 +276,9 @@ export default function Home() {
 
               <button
                 type="submit"
-                className="mt-4 w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700"
+                className="mt-5 w-full rounded-lg bg-linear-to-r from-blue-600 to-cyan-600 px-4 py-2.5 font-semibold text-white transition hover:from-blue-700 hover:to-cyan-700"
               >
-                {mode === "login" ? "Login" : "Create Account"}
+                {mode === "login" ? "Login to Dashboard" : "Create Account"}
               </button>
             </form>
           </div>
@@ -281,26 +288,28 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-900 to-slate-800">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <header className="mb-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-1">
+    <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
+        <header className="mb-6 md:mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
+            <div className="flex-1">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-white mb-2">
                 🌐 {PROJECT_NAME}
               </h1>
-              <p className="text-sm text-cyan-100 mb-1">{PROJECT_TAGLINE}</p>
-              <p className="text-base text-gray-300">Welcome, {user.name}</p>
-              <p className="text-sm text-gray-400">{user.email}</p>
+              <p className="text-xs md:text-sm text-cyan-200 mb-3 line-clamp-2">{PROJECT_TAGLINE}</p>
+              <div className="space-y-1">
+                <p className="text-sm md:text-base text-gray-200 font-medium">Welcome back, <span className="font-bold text-cyan-300">{user.name}</span></p>
+                <p className="text-xs md:text-sm text-gray-400">{user.email}</p>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur">
-                <p className="text-gray-300 text-sm">Total XP</p>
-                <p className="text-5xl font-bold text-yellow-400">{totalXP}</p>
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center md:gap-4">
+              <div className="w-full rounded-xl border border-yellow-400/30 bg-linear-to-br from-yellow-500/20 to-orange-500/20 p-4 text-center backdrop-blur sm:w-auto sm:text-right">
+                <p className="text-gray-300 text-xs md:text-sm font-medium">Total XP</p>
+                <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-300 mt-1">{totalXP}</p>
               </div>
               <button
                 onClick={handleLogout}
-                className="rounded-lg border border-white/20 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+                className="w-full sm:w-auto rounded-lg border-2 border-white/30 px-4 py-2.5 md:py-2 text-sm font-semibold text-white bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all duration-200 active:scale-95"
               >
                 Logout
               </button>
@@ -308,46 +317,50 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="mb-4 rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-          <p className="text-sm font-semibold text-white mb-3">
-            Switch Task Environment
-          </p>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+        <div className="mb-6 rounded-xl border border-white/15 bg-linear-to-br from-white/10 to-white/5 p-5 backdrop-blur-md md:mb-8 md:p-6">
+          <h2 className="text-base md:text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <span>🌍</span> Switch Task Environment
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {taskDestinations.map((task) => (
               <button
                 key={`switch-${task.name}`}
                 onClick={() => setSelectedWorld(task.world)}
-                className={`rounded-lg border px-3 py-2 text-left transition ${
+                className={`rounded-lg border-2 px-4 py-3 text-left transition-all duration-200 hover:scale-[1.02] active:scale-95 md:py-2.5 ${
                   selectedWorld === task.world
-                    ? "border-cyan-300 bg-cyan-500/20"
-                    : "border-white/20 bg-slate-900/30 hover:bg-slate-900/50"
+                    ? "border-cyan-400 bg-cyan-500/30 shadow-lg shadow-cyan-500/20"
+                    : "border-white/20 bg-slate-900/40 hover:bg-slate-800/50 hover:border-white/40"
                 }`}
               >
-                <p className="text-sm font-semibold text-white">
+                <p className="text-base md:text-sm font-bold text-white">
                   {task.emoji} {task.name}
                 </p>
-                <p className="text-xs text-gray-300">Go to {task.name} task</p>
+                <p className="text-xs text-gray-300 mt-1">{task.description}</p>
               </button>
             ))}
           </div>
 
-          <div className="mt-3 flex items-center justify-between rounded-lg border border-cyan-300/30 bg-cyan-900/20 px-3 py-2">
-            <p className="text-xs text-cyan-100">
-              Selected environment:{" "}
-              <span className="font-semibold">
+          <div className="mt-4 flex flex-col gap-3 rounded-lg border-2 border-cyan-400/40 bg-linear-to-r from-cyan-900/30 to-cyan-800/20 px-4 py-3 sm:flex-row sm:items-center sm:justify-between md:py-2.5">
+            <p className="text-xs md:text-sm text-cyan-100 font-medium">
+              Current:{" "}
+              <span className="font-bold text-cyan-300">
                 {selectedTask.emoji} {selectedTask.name}
               </span>
             </p>
             <button
               onClick={() => router.push(selectedTask.route)}
-              className="rounded-md bg-cyan-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-cyan-600"
+              className="min-h-10 w-full rounded-lg bg-linear-to-r from-cyan-500 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:from-cyan-600 hover:to-cyan-700 hover:shadow-lg active:scale-95 sm:w-auto md:min-h-0 md:py-2"
             >
-              Enter Environment
+              🚀 Enter {selectedTask.name}
             </button>
           </div>
         </div>
 
-        <div className="bg-white text-slate-900 rounded-lg shadow-2xl p-8">
+        <div className="rounded-2xl border border-white/20 bg-linear-to-br from-white to-gray-50 p-4 text-slate-900 shadow-2xl sm:p-6 md:p-8">
+          <div className="mb-6">
+            <h2 className="text-lg md:text-2xl font-bold text-slate-900 mb-1">📊 Available Challenges</h2>
+            <p className="text-sm text-gray-600">Select a challenge to begin learning SQL</p>
+          </div>
           <WorldMap
             levels={visibleLevels}
             completedLevelIds={completedLevelIds}

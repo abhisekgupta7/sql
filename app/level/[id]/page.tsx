@@ -286,7 +286,7 @@ export default function LevelPage() {
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-gray-600">Checking account...</p>
+        <p className="text-lg text-gray-600">Loading User...</p>
       </div>
     );
   }
